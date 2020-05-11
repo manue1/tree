@@ -2,12 +2,12 @@ package main
 
 import (
 	"context"
-	"io"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
+	"text/template"
 )
 
 func main() {
@@ -22,7 +22,7 @@ func main() {
 	go func() {
 		log.Printf("listening on :8000")
 		if err := server.ListenAndServe(); err != http.ErrServerClosed {
-			log.Fatalf("failed to listen", err)
+			fatalOnError(err, "failed to listen")
 		}
 	}()
 
@@ -31,7 +31,19 @@ func main() {
 
 func indexHandler(w http.ResponseWriter, req *http.Request) {
 	log.Printf("Request with query: %s\n", req.URL.Query())
-	io.WriteString(w, "Please tell me your favorite tree\n")
+
+	t, err := template.New("index").Parse(indexTpl)
+	fatalOnError(err, "failed to parse template")
+
+	content := struct {
+		Title string
+		Body  string
+	}{
+		Title: "Favorite Tree",
+		Body:  blank,
+	}
+	err = t.Execute(w, content)
+	fatalOnError(err, "failed to apply data to template")
 }
 
 func notifyOnShutdown(s *http.Server) {
@@ -48,4 +60,10 @@ func notifyOnShutdown(s *http.Server) {
 
 	log.Printf("shutting down gracefully")
 	os.Exit(0)
+}
+
+func fatalOnError(err error, msg string) {
+	if err != nil {
+		log.Fatalf(msg, err)
+	}
 }
