@@ -13,14 +13,14 @@ const (
 
 // Index is the "/" handler that renders the index HTML template
 func Index(w http.ResponseWriter, r *http.Request) {
-	tree := r.URL.Query().Get("favoriteTree")
-	log.Printf("favoriteTree query: %s", tree)
+	treeFromQuery := r.URL.Query().Get("favoriteTree")
+	log.Printf("favoriteTree query: %s", treeFromQuery)
 
 	var body string
-	if tree == "" {
+	if treeFromQuery == "" {
 		body = defaultBody
 	} else {
-		body = treePrefix + tree
+		body = treePrefix + treeFromQuery
 	}
 
 	t, err := template.New("index").Parse(indexTpl)
