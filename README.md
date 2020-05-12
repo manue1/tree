@@ -4,10 +4,10 @@ This web server displays your favorite tree in a HTML document if provided as a 
 
 ## Build & run
 
-In order to run this web server you need to first build the image. Then when running it you may find the endpoint exposed on port `:8000`.
+In order to run this web server, at first the image is built. When running the application it can be reached on port `:8000`.
 
 ```sh
-make build up
+make up
 ```
 
 ## Run tests
