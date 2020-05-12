@@ -7,19 +7,23 @@ This web server displays your favorite tree in a HTML document if provided as a 
 In order to run this web server you need to first build the image. Then when running it you may find the endpoint exposed on port `:8000`.
 
 ```sh
-make build
-make up
+make build up
+```
+
+## Run tests
+
+For running the available unit-tests the following command can be used. It builds the image before-hand and runs the tests and outputs the given coverage.
+
+```sh
+make test
 ```
 
 ## Pending improvements
 
-Things that need more attention to reach the desired state:
+Improvements that would be needed to reach the desired state:
 
-- [ ] Main tests
-- [ ] Move handler out of main package
-- [ ] Add metrics
+- [ ] Integration tests (main)
+- [ ] Add HTTP request metrics
 - [ ] Create API documentation
+- [ ] Test coverage of 100% (right now it is 75%)
 - [ ] Multi-stage build of Docker image to serve the binary in a scratch container
-- [X] Serve actual HTML
-- [X] Add query parameter check to handler
-- [X] Gracefully shut down the server
