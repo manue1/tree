@@ -7,56 +7,29 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"text/template"
+
+	"github.com/manue1/favorite-tree/pkg/handler"
 )
 
 func main() {
+	const port = ":8000"
+
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", indexHandler)
+	mux.HandleFunc("/", handler.Index)
 
 	server := &http.Server{
 		Handler: mux,
-		Addr:    ":8000",
+		Addr:    port,
 	}
 
 	go func() {
-		log.Printf("listening on :8000")
+		log.Printf("listening on %s", port)
 		if err := server.ListenAndServe(); err != http.ErrServerClosed {
 			fatalOnError(err, "failed to listen")
 		}
 	}()
 
 	notifyOnShutdown(server)
-}
-
-func indexHandler(w http.ResponseWriter, r *http.Request) {
-	tree := r.URL.Query().Get("favoriteTree")
-	log.Printf("favoriteTree query: %s", tree)
-
-	var body string
-	if tree == "" {
-		body = "Please tell me your favorite tree"
-	} else {
-		body = "It's nice to know that your favorite tree is a " + tree
-	}
-
-	t, err := template.New("index").Parse(indexTpl)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	content := struct {
-		Title string
-		Body  string
-	}{
-		Title: "Favorite Tree",
-		Body:  body,
-	}
-
-	if err := t.Execute(w, content); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
 }
 
 func notifyOnShutdown(s *http.Server) {

@@ -1,4 +1,4 @@
-package main
+package handler
 
 const indexTpl = `<!DOCTYPE html>
 <html lang="en">
