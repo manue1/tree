@@ -29,21 +29,34 @@ func main() {
 	notifyOnShutdown(server)
 }
 
-func indexHandler(w http.ResponseWriter, req *http.Request) {
-	log.Printf("Request with query: %s\n", req.URL.Query())
+func indexHandler(w http.ResponseWriter, r *http.Request) {
+	tree := r.URL.Query().Get("favoriteTree")
+	log.Printf("favoriteTree query: %s", tree)
+
+	var body string
+	if tree == "" {
+		body = "Please tell me your favorite tree"
+	} else {
+		body = "It's nice to know that your favorite tree is a " + tree
+	}
 
 	t, err := template.New("index").Parse(indexTpl)
-	fatalOnError(err, "failed to parse template")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
 	content := struct {
 		Title string
 		Body  string
 	}{
 		Title: "Favorite Tree",
-		Body:  blank,
+		Body:  body,
 	}
-	err = t.Execute(w, content)
-	fatalOnError(err, "failed to apply data to template")
+
+	if err := t.Execute(w, content); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
 
 func notifyOnShutdown(s *http.Server) {

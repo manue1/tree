@@ -15,11 +15,11 @@ make up
 
 Things that need more attention to reach the desired state:
 
-- [ ] Add query parameter check to handler
-- [ ] Serve actual HTML
 - [ ] Main tests
 - [ ] Move handler out of main package
 - [ ] Add metrics
 - [ ] Create API documentation
 - [ ] Multi-stage build of Docker image to serve the binary in a scratch container
+- [X] Serve actual HTML
+- [X] Add query parameter check to handler
 - [X] Gracefully shut down the server
