@@ -8,3 +8,12 @@ build:
 up:
 	@echo "==> Starting the app..."
 	docker run -p 8000:8000 ${APP_NAME}
+
+test:
+	@echo "==> Building unit-tests..."
+	docker build --pull --file unittest.Dockerfile \
+		--tag ${APP_NAME}-unittest \
+		--build-arg importPath=${IMPORT_PATH} .
+
+	@echo "==> Running unit-tests..."
+	docker run --rm ${APP_NAME}-unittest go test -v -parallel=4 -race -cover ./...
