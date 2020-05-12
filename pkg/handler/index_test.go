@@ -21,9 +21,14 @@ func TestIndex(t *testing.T) {
 			fn:       testIndexNoQuery,
 		},
 		{
-			scenario: "Test when favorite query parameter is given",
+			scenario: "Test when valid favorite query parameter is given",
 			url:      "/?favoriteTree=baobab",
-			fn:       testIndexFavoriteTreeParam,
+			fn:       testIndexValidFavoriteTreeParam,
+		},
+		{
+			scenario: "Test when invalid favorite query parameter is given",
+			url:      "/?favoriteTree=" + string([]byte{0xff}),
+			fn:       testIndexInvalidFavoriteTreeParam,
 		},
 	}
 
@@ -51,11 +56,23 @@ func testIndexNoQuery(t *testing.T, rec *httptest.ResponseRecorder) {
 	}
 }
 
-func testIndexFavoriteTreeParam(t *testing.T, rec *httptest.ResponseRecorder) {
+func testIndexValidFavoriteTreeParam(t *testing.T, rec *httptest.ResponseRecorder) {
 	testCommonHTTPMeta(t, rec.Result())
 
 	actual := extractBodyString(rec.Result().Body)
 	expected := treePrefix + "baobab"
+
+	if !strings.Contains(actual, expected) {
+		t.Errorf("unexpected body content: got %v want %v",
+			actual, expected)
+	}
+}
+
+func testIndexInvalidFavoriteTreeParam(t *testing.T, rec *httptest.ResponseRecorder) {
+	testCommonHTTPMeta(t, rec.Result())
+
+	actual := extractBodyString(rec.Result().Body)
+	expected := defaultBody
 
 	if !strings.Contains(actual, expected) {
 		t.Errorf("unexpected body content: got %v want %v",
