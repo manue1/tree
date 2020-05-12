@@ -23,15 +23,16 @@ func main() {
 	}
 
 	go func() {
-		log.Printf("listening on %s", port)
+		log.Printf("listening on 127.0.0.1%s", port)
 		if err := server.ListenAndServe(); err != http.ErrServerClosed {
-			fatalOnError(err, "failed to listen")
+			log.Fatal("server failed to listen", err)
 		}
 	}()
 
 	notifyOnShutdown(server)
 }
 
+// notifyOnShutdown listens for the listed system signals and shuts down the server gracefully
 func notifyOnShutdown(s *http.Server) {
 	signalChan := make(chan os.Signal, 1)
 	signal.Notify(signalChan, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
@@ -46,10 +47,4 @@ func notifyOnShutdown(s *http.Server) {
 
 	log.Printf("shutting down gracefully")
 	os.Exit(0)
-}
-
-func fatalOnError(err error, msg string) {
-	if err != nil {
-		log.Fatalf(msg, err)
-	}
 }
