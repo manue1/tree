@@ -8,7 +8,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/manue1/favorite-tree/pkg/handler"
+	"github.com/manue1/tree/pkg/handler"
 )
 
 func main() {

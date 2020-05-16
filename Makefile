@@ -1,4 +1,4 @@
-APP_NAME 	= favorite-tree
+APP_NAME 	= tree
 IMPORT_PATH = github.com/manue1/${APP_NAME}
 
 up:

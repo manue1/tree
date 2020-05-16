@@ -1,3 +1,3 @@
-module github.com/manue1/favorite-tree
+module github.com/manue1/tree
 
 go 1.14

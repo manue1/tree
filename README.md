@@ -1,4 +1,4 @@
-# favorite-tree
+# tree
 
 This web server displays your favorite tree in a HTML document if provided as a query parameter.
 
@@ -17,13 +17,3 @@ For running the available unit-tests the following command can be used. It build
 ```sh
 make test
 ```
-
-## Pending improvements
-
-Improvements that would be needed to reach the desired state:
-
-- [ ] Integration tests (main)
-- [ ] Add HTTP request metrics
-- [ ] Create API documentation
-- [ ] Test coverage of 100% (right now it is 75%)
-- [ ] Multi-stage build of Docker image to serve the binary in a scratch container
